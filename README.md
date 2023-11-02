@@ -2,10 +2,13 @@
 
 ## Members:
 
-Chance Spurgeon-Couraud
-Morgan Ray Altmann
-Erik Harden
-Jared Milligan
+Chance Spurgeon-Couraud  
+
+Morgan Ray Altmann  
+
+Erik Harden  
+
+Jared Milligan  
 
 
  
