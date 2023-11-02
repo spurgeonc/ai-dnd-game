@@ -1,9 +1,19 @@
-﻿Current goals: Train AI to recognize rooms/borders/grid squares, token recognition, create classes for GPT personalities, image upload, image reading, file storage
+# AI DnD Group
+## Members:
+Chance Spurgeon-Couraud
+Morgan Ray Altmann
+Erik Harden
+Jared Milligan
+
+
+ 
+## Current goals: 
+Train AI to recognize rooms/borders/grid squares, token recognition, create classes for GPT personalities, image upload, image reading, file storage
 
 
 
 
-How we envision this working:
+## How we envision this working:
         A camera will overlook a play area
         The play area will consist of a dnd dry erase mat and a dungeon drawn on the mat
         There will be white markers on the mat with a number and letter combination on it
@@ -23,7 +33,7 @@ How we envision this working:
         Rinse and repeat until dead or cool stuff
 
 
-Features:
+## Features:
         Multiple gpt bots to for every personality
         A gpt bot to create prompts to train new gpt bots(bots of bots kinda like the office space that microsoft has done)
         A vision to gpt ability so that gpt can see and then actually make sense when he talks
@@ -58,7 +68,7 @@ Features:
 
 
 
-Image upload and scan
+## Image upload and scan
 
 
 
@@ -77,7 +87,7 @@ Image upload and scan
 
 
 
-
+## Notes
 API: read image
 ChatGPT:
 what libraries can I use to recognize grid like maps and store the data in a file?
@@ -104,10 +114,10 @@ c. SQLite: If you need a relational database, you can use SQLite to store the gr
 * Geospatial Libraries:
 a. If your grid-like maps have geospatial information (e.g., latitude and longitude), you might want to use geospatial libraries like GDAL, Fiona, or Shapely for working with geospatial data.
 
+p
 
 
-
- 
+## tl;dr
 memory token - separate memory for each room
 Different instances of chatgpt - different characters, different personalities, different rooms, different jobs
 Json or pickle to save data
@@ -123,6 +133,6 @@ Recognize hallways vs rooms based on shape
 
 
   
-
+## comments
 [a]I am excited about the prospect of different GPT personalities, especially if there's more than 1 in a single room, and figuring out how that'll work
 [b]Using the characters/rooms closest to the player tokens will probably be the most difficult part of the project, but I'm excited to see how it plays out
