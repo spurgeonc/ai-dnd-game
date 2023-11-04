@@ -15,8 +15,8 @@ def label_cells(image_path, output_format='csv'):
     # Find contours of the grids
     contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Sort contours by area to get the largest grid cells first
-    contours = sorted(contours, key=cv2.contourArea, reverse=True)
+    # Sort contours by their y-coordinate (top to bottom), and then by x-coordinate (left to right)
+    contours = sorted(contours, key=lambda contour: (cv2.boundingRect(contour)[1], cv2.boundingRect(contour)[0]))
 
     labeled_cells = {}
     label_index = 0
