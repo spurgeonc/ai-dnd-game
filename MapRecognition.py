@@ -1,35 +1,60 @@
 import cv2
-import pytesseract
-from pytesseract import Output
+import numpy as np
+import string
+import csv
+import json
 
-# Load the image
-image = cv2.imread('./maps/map1.jpg')
+def label_cells(image_path, output_format='csv'):
+    # Load the image using OpenCV
+    image = cv2.imread(image_path)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-# Convert the image to grayscale
-gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Apply thresholding to create a binary image
+    _, binary = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)
 
-# Apply thresholding to enhance text contrast
-ret, thresholded_image = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    # Find contours of the grids
+    contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# Find contours to detect individual cells or text regions
-contours, _ = cv2.findContours(thresholded_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Sort contours by area to get the largest grid cells first
+    contours = sorted(contours, key=cv2.contourArea, reverse=True)
 
-# Initialize an empty list to store cell labels
-cell_labels = []
+    labeled_cells = {}
+    label_index = 0
 
-# Loop through the detected contours
-for contour in contours:
-    x, y, w, h = cv2.boundingRect(contour)
-    
-    # Crop the cell region from the thresholded image
-    cell_image = thresholded_image[y:y+h, x:x+w]
-    
-    # Use Tesseract to recognize the text in the cell
-    cell_text = pytesseract.image_to_string(cell_image, config='--psm 6', output_type=Output.STRING)
-    
-    # Append the recognized text to the cell_labels list
-    cell_labels.append(cell_text)
+    for idx, contour in enumerate(contours):
+        if cv2.contourArea(contour) > 100:  # Adjust this threshold as needed
+            # Calculate the centroid of the cell
+            M = cv2.moments(contour)
+            if M["m00"] != 0:
+                cX = int(M["m10"] / M["m00"])
+                cY = int(M["m01"] / M["m00"])
 
-# Print the extracted cell labels
-for idx, label in enumerate(cell_labels):
-    print(f"Cell {idx + 1} Label: {label}")
+                # Generate a unique cell label
+                cell_label = f'{string.ascii_uppercase[label_index % 26]}{label_index // 26 + 1}'
+                label_index += 1
+                labeled_cells[f'Cell {idx + 1}'] = cell_label
+
+                # Draw the label on the image
+                cv2.putText(image, f'Cell {idx + 1}: {cell_label}', (cX, cY),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+
+    # Save the labeled image
+    cv2.imwrite('labeled_map.png', image)
+
+    if output_format == 'csv':
+        # Export the labeled cells to a CSV file
+        with open('labeled_cells.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['Cell Number', 'Label'])
+            for cell, label in labeled_cells.items():
+                writer.writerow([cell, label])
+
+    elif output_format == 'json':
+        # Export the labeled cells to a JSON file
+        with open('labeled_cells.json', 'w') as jsonfile:
+            json.dump(labeled_cells, jsonfile, indent=4)
+
+if __name__ == "__main__":
+    input_image_path = 'map2.jpg'
+    output_format = 'csv'  # Change to 'json' if you want JSON output
+    label_cells(input_image_path, output_format)
