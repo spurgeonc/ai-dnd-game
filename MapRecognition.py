@@ -34,8 +34,11 @@ def label_cells(image_path, output_format='csv'):
                 label_index += 1
                 labeled_cells[f'Cell {idx + 1}'] = cell_label
 
+                # Calculate the position to draw the label within the cell
+                label_position = (cX - 15, cY + 15)  # Adjust these values as needed
+
                 # Draw the label on the image
-                cv2.putText(image, f'Cell {idx + 1}: {cell_label}', (cX, cY),
+                cv2.putText(image, cell_label, label_position,
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
     # Save the labeled image
@@ -55,6 +58,6 @@ def label_cells(image_path, output_format='csv'):
             json.dump(labeled_cells, jsonfile, indent=4)
 
 if __name__ == "__main__":
-    input_image_path = 'map2.jpg'
+    input_image_path = 'map4.png'
     output_format = 'csv'  # Change to 'json' if you want JSON output
     label_cells(input_image_path, output_format)
