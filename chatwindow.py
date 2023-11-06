@@ -1,4 +1,9 @@
 import requests
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 def chat_with_gpt(messages, api_key):
     url = "https://api.openai.com/v1/chat/completions"
@@ -18,7 +23,11 @@ def chat_with_gpt(messages, api_key):
     return response.json()['choices'][0]['message']['content']
 
 def main():
-    api_key = "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"  # Replace with your actual API key
+    api_key = os.getenv("OPENAI_API_KEY")  # Get the API key from the environment variable
+    if not api_key:
+        print("API key not found. Please set it in the .env file.")
+        return
+
     print("Welcome to the ChatGPT interface!")
     messages = []  # Initialize an empty list to keep track of the conversation
     while True:
