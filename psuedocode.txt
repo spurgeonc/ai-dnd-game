@@ -1,0 +1,24 @@
+prompt = "You are the DM in a DnD game. the player can see the following: "
+map-object = parse-from-file(json-file)
+
+player = find player character in map-object
+
+for token in map-object:
+    
+    if there is wall between player and token:
+        token-is-visible = false
+    else
+        token-is-visible = true
+
+    if token-is-visible:
+        if token != blank space
+            prompt = prompt + token name + ", " 
+
+new-DM-string = prompt-ChatGPT(
+    [
+        "system" : prompt
+    ],
+    append conversation-history,
+)
+
+conversation-history.append("assistant" : new-DM-string)
