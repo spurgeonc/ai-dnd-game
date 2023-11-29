@@ -80,7 +80,7 @@ def main():
 
         # Update full history for the GM's response
         full_history = gm.message_history + npc1.message_history + npc2.message_history + npc3.message_history + player.message_history
-        gm_prompt = "As the Game Master, narrate the unfolding story, weaving together the actions of the Warrior, Rogue, Sorcerer, and Player. You do not physically exist, you merely serve to set the stage and keep the story going forward. You are responsible to maintain some sense of direction for the group. Make sure that your responses are appropriate for what everyone has said thus far."
+        gm_prompt = "As the Game Master, narrate the unfolding story, weaving together the actions of the Warrior, Rogue, Sorcerer, and Player. You do not physically exist, you merely serve to set the stage and keep the story going forward. You are responsible to maintain some sense of direction for the group. Make sure that your responses are appropriate for what everyone has said thus far, and the room you are in. The player will dictate when the party moves to a new area."
         gm_response = chat_with_gpt(full_history + [{'role': 'system', 'content': gm_prompt}], api_key)
         print(f"{gm.name}: {gm_response}")
         gm.add_message(gm_response)
