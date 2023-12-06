@@ -1,34 +1,18 @@
-global coordinates 
-coordinates = []
+# Initialize variables to store the numbers
+token_numbers = None
+token = "token"
 
-def find_token_coords():
-    global coordinates
-    # Open the text file for reading
-    with open('detection.txt', 'r') as file:
-        # Initialize a variable to keep track of the line number
-        line_number = 0
-
-        # Initialize variables to store the four numbers
-        token_line = None
-        numbers = None
-        
-        # Iterate through each line in the file
-        for line in file:
-            # Increment the line number
-            line_number += 1
+# Open the text file for reading
+with open("detection.txt", "r") as file:
+    # Iterate through each line in the file
+    for line in file:
+        # Check if the line contains token
+        if token in line:
+            # Extract the four numbers from the line
+            numbers = [int(num) for num in line.split("[")[1].split("]")[0].split(", ")]
             
-            # Check if the line contains the word "token"
-            if "token" in line:
-                print(f"Found 'token' on line {line_number}: {line.strip()}")
-                token_line = line.strip()  # Remove leading/trailing whitespace
-                # Split the line by spaces and convert the numbers to integers
-                numbers = [int(num) for num in token_line.split() if num.isdigit()]
-
-                if len(numbers) == 4:
-                    coordinates = numbers  # Store the coordinates in the global variable
-                    return  # Exit the function after finding the coordinates
-
-
+            # Store the numbers in the variables
+            token_numbers = numbers
 
 def find_room(x, y):
     if (515 <= x <= 590 and 175 <= y <= 220) or (543 <= x <= 573 and 321 <= y <= 336):
@@ -74,19 +58,32 @@ def find_room(x, y):
     elif 260 <= x <= 422 and 350 <= y <= 405:
         return "Room 23"
     else:
-        return "No room found for these coordinates"
+        print("No room found for these coordinates")
+        return None
 
-# Example usage:
-x = 400  # test for now
-y = 250  # test for now
-find_token_coords()  # Call the function to find the token coordinates
-# Check if the "token" line was found
-if len(coordinates) == 4:
-    # Now you can access the individual numbers
-    num1, num2, num3, num4 = coordinates  # Use coordinates instead of numbers
-    print(f"Numbers from 'token' line: {num1}, {num2}, {num3}, {num4}")
+# Check if the word "token" was found in the file
+if token_numbers is not None:
+    # Print the numbers and store them in variables
+    # print("Token Numbers:", token_numbers)
+
+    x1, y1, x2, y2 = token_numbers
+    # print("x1:", x1) # test line, keeping in case further tests needed
+    # print("y1:", y1) # test line, keeping in case further tests needed
+    # print("x2:", x2) # test line, keeping in case further tests needed
+    # print("y2:", y2) # test line, keeping in case further tests needed
+
+    xcent = (x1 + x2) / 2
+    ycent = (y1 + y2) / 2
+
+    # print("xcent:", xcent) # test line, keeping in case further tests needed
+    # print("ycent:", ycent) # test line, keeping in case further tests needed
+
+    room = find_room(xcent, ycent)
+
+    if room is not None:
+        print(room)
+        with open("current_room.txt", "w") as file:
+            file.write(room)
+
 else:
-    print("The word 'token' was not found in the file.")
-
-room = find_room(x, y)
-print(f"Coordinates ({x}, {y}) are in {room}")
+    print(f"No line containing the word {token} found in the file.")

@@ -58,7 +58,8 @@ def find_room(x, y):
     elif 260 <= x <= 422 and 350 <= y <= 405:
         return "Room 23"
     else:
-        return "No room found for these coordinates"
+        print("Warning: No room found for these coordinates")
+        return None
 
 # Check if the word "token" was found in the file
 if token_numbers is not None:
@@ -77,6 +78,12 @@ if token_numbers is not None:
     # print("xcent:", xcent) # test line, keeping in case further tests needed
     # print("ycent:", ycent) # test line, keeping in case further tests needed
 
-    print(find_room(xcent, ycent))
+    room = find_room(xcent, ycent)
+
+    if room is not None:
+        # print(room)
+        with open("current_room.txt", "w") as file:
+            file.write(room)
+
 else:
-    print(f"No line containing the word {token} found in the file.")
+    print(f"Warning: No line containing the word {token} found in the file.")
